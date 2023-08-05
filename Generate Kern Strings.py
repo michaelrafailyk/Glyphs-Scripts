@@ -1,5 +1,6 @@
 #MenuTitle: Generate Kern Strings
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 __doc__="""
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 """
