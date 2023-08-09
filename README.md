@@ -14,11 +14,21 @@ Python scripts for the [Glyphs font editor](http://glyphsapp.com/).
 
 # Scripts
 
+## Align to Layer Horizontal Center
+
+Align selection to horizontal center of the layer, also considering the italic angle.
+
+![](Images/AlignToLayerHorizontalCenter.gif)
+
+The key feature of this script is how it analyzes bounds if an italic angle is specified. Each node in a selection is analyzed (even within components) to find the left and right extremes, respected to italic angle.
+
 ## Generate Kern Strings
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 
 ![](Images/GenerateKernStrings.gif)
+
+The steps the script takes:
 
 - Get unique left and right groups.
 - Get one character attached to each group. Priority is given to characters whose name matches the name of the group. If the glyph don't have a character value (not a part of Unicode), the glyph name will be taken, like `/one.osf `.
