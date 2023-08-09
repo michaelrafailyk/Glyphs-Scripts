@@ -20,7 +20,9 @@ Align selection to horizontal center of the layer, also considering the italic a
 
 ![](Images/AlignToLayerHorizontalCenter.gif)
 
-The key feature of this script is how it analyzes bounds if an italic angle is specified. Each node in a selection is analyzed (even within components) to find the left and right extremes, respected to italic angle.
+The script does not change the sidebearings to align the content, but only changes the x-coordinates of the selected elements.
+
+The key feature of this script is how it analyzes bounds if an italic angle is specified. Each node in a selection is analyzed (even within components) to find the left and right extremes, respected to italic angle. And these extremes give the left origin and the width of the slanted bounds.
 
 If a group of objects of different types (nodes, components, anchors, guides) is selected, they will be aligned to the center of the layer as a group, keeping the distance between the group elements.
 
