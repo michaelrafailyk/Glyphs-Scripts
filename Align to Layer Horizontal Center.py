@@ -36,9 +36,9 @@ if len(selection) > 0:
 	# take into account the italic angle if set
 	italicAngle = layer.master.italicAngle
 	if italicAngle != 0:
-		# get an italic vertical 0 origin
+		# get the italic vertical origin
 		italicVerticalZero = 0
-		if 'e+' not in str(layer.master.xHeight):
+		if layer.master.xHeight < Glyphs.font.upm:
 			italicVerticalZero = layer.master.xHeight / 2
 		italicAngleRadiansTan = tan(radians(italicAngle))
 		# find the left and right extremes respected to italic angle
