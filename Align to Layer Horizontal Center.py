@@ -36,6 +36,10 @@ if len(selection) > 0:
 	# take into account the italic angle if set
 	italicAngle = layer.master.italicAngle
 	if italicAngle != 0:
+		# get an italic vertical 0 origin
+		italicVerticalZero = 0
+		if 'e+' not in str(layer.master.xHeight):
+			italicVerticalZero = layer.master.xHeight / 2
 		italicAngleRadiansTan = tan(radians(italicAngle))
 		# find the left and right extremes respected to italic angle
 		extremeLeft = False
@@ -45,7 +49,7 @@ if len(selection) > 0:
 			for node in selection:
 				# ignoring the handles
 				if type(node) == GSNode and node.type != OFFCURVE:
-					x = node.x + italicAngleRadiansTan * (layer.master.xHeight / 2 - node.y)
+					x = node.x + italicAngleRadiansTan * (italicVerticalZero - node.y)
 					if extremeLeft == False or x < extremeLeft:
 						extremeLeft = x
 					if extremeRight == False or x > extremeRight:
@@ -60,7 +64,7 @@ if len(selection) > 0:
 				for node in path.nodes:
 					# ignoring the handles
 					if type(node) == GSNode and node.type != OFFCURVE:
-						x = node.x + italicAngleRadiansTan * (layer.master.xHeight / 2 - node.y)
+						x = node.x + italicAngleRadiansTan * (italicVerticalZero - node.y)
 						if extremeLeft == False or x < extremeLeft:
 							extremeLeft = x
 						if extremeRight == False or x > extremeRight:
@@ -72,7 +76,7 @@ if len(selection) > 0:
 		else:
 			# for components/anchors/guides
 			selectionCenterY = box.origin.y + box.size.height / 2
-			shift -= italicAngleRadiansTan * (layer.master.xHeight / 2 - selectionCenterY)
+			shift -= italicAngleRadiansTan * (italicVerticalZero - selectionCenterY)
 
 	shift = int(shift)
 	# move selection
