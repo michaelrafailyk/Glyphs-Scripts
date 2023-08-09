@@ -22,6 +22,8 @@ Align selection to horizontal center of the layer, also considering the italic a
 
 The key feature of this script is how it analyzes bounds if an italic angle is specified. Each node in a selection is analyzed (even within components) to find the left and right extremes, respected to italic angle.
 
+If a group of objects of different types (nodes, components, anchors, guides) is selected, they will be aligned to the center of the layer as a group, keeping the distance between the group elements.
+
 ## Generate Kern Strings
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
