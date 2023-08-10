@@ -37,6 +37,7 @@ if len(selection) > 0:
 	italicAngle = layer.master.italicAngle
 	if italicAngle != 0:
 		# get the italic vertical origin
+		# Check if x-height is set or not
 		italicVerticalZero = 0
 		if layer.master.xHeight < Glyphs.font.upm:
 			italicVerticalZero = layer.master.xHeight / 2
