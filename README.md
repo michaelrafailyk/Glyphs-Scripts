@@ -12,6 +12,8 @@ Python scripts for the [Glyphs font editor](http://glyphsapp.com/).
 - Put the scripts into `~/Library/Application Support/Glyphs 3/Scripts` folder.
 - Hold down the `Option` key and choose Script > Reload Scripts, or just press `Cmd` `Opt` `Shift` `Y` keys.
 
+**Scripts**
+
 # Align to Layer Horizontal Center
 
 Align selection to horizontal center of the layer, also considering the italic angle.
