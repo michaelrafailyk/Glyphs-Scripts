@@ -1,20 +1,18 @@
-# About
+**About**
 
 Python scripts for the [Glyphs font editor](http://glyphsapp.com/).
 
-# Requirement
+**Requirement**
 
 - Glyphs
 - Python
 
-# Installing
+**Installing**
 
 - Put the scripts into `~/Library/Application Support/Glyphs 3/Scripts` folder.
 - Hold down the `Option` key and choose Script > Reload Scripts, or just press `Cmd` `Opt` `Shift` `Y` keys.
 
-# Scripts
-
-## Align to Layer Horizontal Center
+# Align to Layer Horizontal Center
 
 Align selection to horizontal center of the layer, also considering the italic angle.
 
@@ -26,7 +24,9 @@ The key feature of this script is how it analyzes bounds if an italic angle is s
 
 If a group of objects of different types (nodes, components, anchors, guides) is selected, they will be aligned to the center of the layer as a group, keeping the distance between the group elements.
 
-## Generate Kern Strings
+A shortcut I find handy for this script is `Ctrl` `Shift` `A`
+
+# Generate Kern Strings
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 
