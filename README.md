@@ -28,6 +28,12 @@ If a group of objects of different types (nodes, components, anchors, guides) is
 
 A shortcut I find handy for this script is `Ctrl` `Shift` `A`
 
+# Flip Horizontal
+
+Flip selection (or layer) horizontal, set the new first node (lowest left) and correct path direction.
+
+A shortcut I find handy for this script is `Ctrl` `Shift` `F`
+
 # Generate Kern Strings
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
