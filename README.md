@@ -26,13 +26,13 @@ The key feature of this script is how it analyzes bounds if an italic angle is s
 
 If a group of objects of different types (nodes, components, anchors, guides) is selected, they will be aligned to the center of the layer as a group, keeping the distance between the group elements.
 
-A shortcut I find handy for this script is `Ctrl` `Shift` `A`
+Shortcut suggestion: `Ctrl` `Shift` `A`
 
 # Flip Horizontal
 
 Flip selection (or layer) horizontal, set the new first node (lowest left) and correct path direction.
 
-A shortcut I find handy for this script is `Ctrl` `Shift` `F`
+Shortcut suggestion: `Ctrl` `Shift` `F`
 
 # Generate Kern Strings
 
