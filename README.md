@@ -38,8 +38,6 @@ Shortcut suggestion: `Ctrl` `Shift` `F`
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 
-![](Images/GenerateKernStrings.gif)
-
 The steps the script takes:
 
 - Get unique left and right groups.
