@@ -26,7 +26,8 @@ if len(selection) > 0:
 			for node in path.nodes:
 				if type(node) == GSNode and node.type != OFFCURVE:
 					# compare node to candidate
-					if candidate['y'] == False or (int(node.y) < candidate['y']) or (int(node.y) == candidate['y'] and int(node.x) < candidate['x']):
+					candidateIsEmpty = candidate['x'] == False and candidate['y'] == False
+					if candidateIsEmpty or int(node.y) < candidate['y'] or (int(node.y) == candidate['y'] and int(node.x) < candidate['x']):
 						# save the better candidate
 						candidate['node'] = node
 						candidate['x'] = int(node.x)
