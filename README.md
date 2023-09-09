@@ -55,7 +55,7 @@ The steps the script takes:
 - Get one character attached to each group. Priority is given to characters whose name matches the name of the group. If the glyph don't have a character value (not a part of Unicode), the glyph name will be taken, like `/one.osf `.
 - Sort the characters by `uppercase` `lowercase` `figure` `punctuation` `other` `sc` categories.
 - Sort the characters inside these categories.
-- Generate kern strings like `CC` `R` `LLLLLLLLL`, where `C` is a character to compare with (can be **HH** **nn** **00** **/h.sc/h.sc**), `R` is the one character from Right Groups (needed kerning to all the following ones), and `L` are all the characters from Left Groups (to kern with). For example, for the character `r` from Right Group, the first kern string may looks like: `nnrAHOJSTUVXYZaonftsuvxz01234589.?*-'//`.
+- Generate kern strings like `CC` `R` `LLLLLLLLL`, where `C` is a character to compare with (can be **HH** **nn** **00** **/h.sc/h.sc**), `R` is the one character from Right Groups (needed kerning to all the following ones), and `L` are all the characters from Left Groups (to kern with). For example, for the character `r` from Right Group, the first kern string may looks like: `nn` `r` `AHOJSTUVXYZaonftsuvxz01234589.?*-'//`.
 - Add kern strings to the Sample Texts to the category named after the font family name.
 - Open Edit view tab.
 - Activate Text tool.
