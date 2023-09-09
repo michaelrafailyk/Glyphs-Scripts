@@ -36,7 +36,7 @@ Shortcut suggestion: `Ctrl` `Shift` `F`
 
 # Generate Kern Strings
 
-Generate kern strings based on the Left and Right groups and add them into the Sample Texts. For example, for the left groups `C` `D` `c` `d` `3` `4` `.` `-` `c.sc` `d.sc` and right groups `A` `B` `a` `b` `1` `2` `.` `-` `a.sc` `b.sc` the kern strings will be:
+Generate kern strings based on the Left and Right groups and add them into the Sample Texts. For example, for the left groups `C` `D` `c` `d` `three` `four` `.` `-` `c.sc` `d.sc` and right groups `A` `B` `a` `b` `one` `two` `.` `-` `a.sc` `b.sc` the kern strings will be:
 
 - HH`A`CDcd34.-/c.sc/d.sc
 - HH`B`CDcd34.-/c.sc/d.sc
