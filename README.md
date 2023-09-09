@@ -38,16 +38,16 @@ Shortcut suggestion: `Ctrl` `Shift` `F`
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts. For example, for the left groups `C` `D` `c` `d` `3` `4` `.` `-` `c.sc` `d.sc` and right groups `A` `B` `a` `b` `1` `2` `.` `-` `a.sc` `b.sc` the kern strings will be:
 
-- HH `A` CDcd34.-/c.sc/d.sc
-- HH `B` CDcd34.-/c.sc/d.sc
-- nn `a` CDcd34.-
-- nn `b` CDcd34.-
-- 00 `1` CDcd34.-
-- 00 `2` CDcd34.-
-- HH `.` CDcd34.-
-- HH `-` CDcd34.-
-- /h.sc/h.sc `/a.sc` /c.sc/d.sc
-- /h.sc/h.sc `/b.sc` /c.sc/d.sc
+- HH`A`CDcd34.-/c.sc/d.sc
+- HH`B`CDcd34.-/c.sc/d.sc
+- nn`a`CDcd34.-
+- nn`b`CDcd34.-
+- 00`1`CDcd34.-
+- 00`2`CDcd34.-
+- HH`.`CDcd34.-
+- HH`-`CDcd34.-
+- /h.sc/h.sc`/a.sc`/c.sc/d.sc
+- /h.sc/h.sc`/b.sc`/c.sc/d.sc
 
 The steps the script takes:
 
