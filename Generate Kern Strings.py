@@ -4,7 +4,7 @@ from __future__ import print_function
 __doc__="""
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 """
-# Copyright: Michael Rafailyk, 2023, Version 1.0
+# Copyright: Michael Rafailyk, 2023, Version 1.1
 
 group = {
 	'left': {
@@ -13,6 +13,7 @@ group = {
 		'lowercase': [],
 		'figure': [],
 		'punctuation': [],
+		'sc': [],
 		'other': []
 	},
 	'right': {
@@ -21,6 +22,7 @@ group = {
 		'lowercase': [],
 		'figure': [],
 		'punctuation': [],
+		'sc': [],
 		'other': []
 	}
 }
@@ -71,7 +73,9 @@ def getGlyphData(glyph, side):
 		# Correct the name for a slash character
 		character = '//';
 	# Write the character to appropriate category
-	if glyph.category == 'Letter' and glyph.case == 1:
+	if '.sc' in groupName:
+		group[side]['sc'].append('/' + glyph.name)
+	elif glyph.category == 'Letter' and glyph.case == 1:
 		group[side]['uppercase'].append(character)
 	elif glyph.category == 'Letter' and glyph.case == 2:
 		group[side]['lowercase'].append(character)
@@ -90,7 +94,7 @@ def generateKernStrings():
 		if group['left']['name'] and group['right']['name']:
 			# Merge categories
 			leftGroup = group['left']['uppercase'] + group['left']['lowercase'] + group['left']['figure'] + group['left']['punctuation'] + group['left']['other']
-			rightGroup = group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other']
+			rightGroup = group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc']
 			for elem in leftGroup:
 				# All characters from Left Groups to kern with
 				strings['left'] += elem
@@ -99,13 +103,20 @@ def generateKernStrings():
 				strings['right'] += elem
 				# Two characters at the begin to compare with
 				compare = 'HH'
+				sc = ''
+				scLeft = ''.join(group['left']['sc'])
 				if elem[0].islower():
 					compare = 'nn'
 				elif elem[0].isnumeric():
 					compare = '00'
+				if elem[0].isupper():
+					sc = scLeft
+				stringsLine = compare + elem + strings['left'] + sc + '\n'
+				if '.sc' in elem:
+					stringsLine = '/h.sc/h.sc' + elem + scLeft + '\n'
 				# String for kerning
 				# elem is the main character needed kerning with all the following ones
-				strings['text'] += compare + elem + strings['left'] + '\n'
+				strings['text'] += stringsLine
 			# Remove empty string at the end
 			strings['text'] = strings['text'][:-2]
 			# Set category name the same as font family name
