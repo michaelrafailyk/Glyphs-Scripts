@@ -43,6 +43,13 @@ def getUniqueGroups():
 				getGlyphData(glyph, 'left')
 			if glyph.rightKerningGroup and glyph.rightKerningGroup not in group['right']['name']:
 				getGlyphData(glyph, 'right')
+		# Sort elements inside the groups categories
+		group['left']['uppercase'].sort()
+		group['left']['lowercase'].sort()
+		group['left']['figure'].sort()
+		group['right']['uppercase'].sort()
+		group['right']['lowercase'].sort()
+		group['right']['figure'].sort()
 	else:
 		Glyphs.clearLog()
 		Glyphs.showMacroWindow()
