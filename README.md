@@ -38,12 +38,25 @@ Shortcut suggestion: `Ctrl` `Shift` `F`
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 
+For example, for the left groups `C` `D` `c` `d` `3` `4` `.` `-` `c.sc` `d.sc` and right groups `A` `B` `a` `b` `1` `2` `.` `-` `a.sc` `b.sc` the kern strings will be:
+
+- HH `A` CDcd34.-/c.sc/d.sc
+- HH `B` CDcd34.-/c.sc/d.sc
+- nn `a` CDcd34.-
+- nn `b` CDcd34.-
+- 00 `1` CDcd34.-
+- 00 `2` CDcd34.-
+- HH `.` CDcd34.-
+- HH `-` CDcd34.-
+- /h.sc/h.sc `/a.sc` /c.sc/d.sc
+- /h.sc/h.sc `/b.sc` /c.sc/d.sc
+
 The steps the script takes:
 
 - Get unique left and right groups.
 - Get one character attached to each group. Priority is given to characters whose name matches the name of the group. If the glyph don't have a character value (not a part of Unicode), the glyph name will be taken, like `/one.osf `.
 - Sort the characters by `uppercase` `lowercase` `figure` `punctuation` `other`.
-- Generate kern strings like `CC` `R` `LLLLLLLLL`, where `C` is a character to compare with (can be **HH** **nn** **00**), `R` is the one character from Right Groups (needed kerning to all the following ones), and `L` are all the characters from Left Groups (to kern with). For example, for the character `r` from Right Group, the first kern string may looks like: `nnrAHOJSTUVXYZaonftsuvxz01234589.?*-'//`.
+- Generate kern strings like `CC` `R` `LLLLLLLLL`, where `C` is a character to compare with (can be **HH** **nn** **00** **/h.sc/h.sc**), `R` is the one character from Right Groups (needed kerning to all the following ones), and `L` are all the characters from Left Groups (to kern with). For example, for the character `r` from Right Group, the first kern string may looks like: `nnrAHOJSTUVXYZaonftsuvxz01234589.?*-'//`.
 - Add kern strings to the Sample Texts to the category named after the font family name.
 - Open Edit view tab.
 - Activate Text tool.
