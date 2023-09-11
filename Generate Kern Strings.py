@@ -93,6 +93,19 @@ def getGlyphData(glyph, side):
 	else:
 		group[side]['other'].append(character)
 
+# Print groups to the Macro Panel output
+def printGroups():
+	if Glyphs.font:
+		global group
+		if group['left']['name'] and group['right']['name']:
+			leftGroup = ''.join(group['left']['uppercase'] + group['left']['lowercase'] + group['left']['figure'] + group['left']['punctuation'] + group['left']['other'] + group['left']['sc'])
+			rightGroup = ''.join(group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc'])
+			print('Right Groups:')
+			print(rightGroup)
+			print()
+			print('Left Groups:')
+			print(leftGroup)
+
 # Generate kern strings
 def generateKernStrings():
 	if Glyphs.font:
@@ -181,6 +194,7 @@ def openKernStrings():
 		tab.textCursor = 3
 
 getUniqueGroups()
+printGroups()
 generateKernStrings()
 addKernStrings()
 openKernStrings()
