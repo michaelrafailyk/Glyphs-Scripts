@@ -71,9 +71,9 @@ def getGlyphData(glyph, side):
 	group[side]['name'].append(groupName)
 	character = ''
 	if Glyphs.font.glyphs[groupName]:
+		# Try to find a glyph with the same name as the name of this group
 		glyph = Glyphs.font.glyphs[groupName]
 		if Glyphs.font.glyphs[groupName].string:
-			# Try to find a glyph with the same name as the name of this group
 			character = glyph.string
 		else:
 			character = '/' + groupName + ' '
