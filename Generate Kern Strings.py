@@ -47,9 +47,13 @@ def getUniqueGroups():
 		group['left']['uppercase'].sort()
 		group['left']['lowercase'].sort()
 		group['left']['figure'].sort()
+		group['left']['sc'].sort()
+		group['left']['sc'].sort(key=len)
 		group['right']['uppercase'].sort()
 		group['right']['lowercase'].sort()
 		group['right']['figure'].sort()
+		group['right']['sc'].sort()
+		group['right']['sc'].sort(key=len)
 	else:
 		Glyphs.clearLog()
 		Glyphs.showMacroWindow()
@@ -66,10 +70,13 @@ def getGlyphData(glyph, side):
 	# Write the group name
 	group[side]['name'].append(groupName)
 	character = ''
-	if Glyphs.font.glyphs[groupName] and Glyphs.font.glyphs[groupName].string:
-		# Try to find a glyph with the same name as the name of this group
+	if Glyphs.font.glyphs[groupName]:
 		glyph = Glyphs.font.glyphs[groupName]
-		character = glyph.string
+		if Glyphs.font.glyphs[groupName].string:
+			# Try to find a glyph with the same name as the name of this group
+			character = glyph.string
+		else:
+			character = '/' + groupName + ' '
 	elif glyph.string:
 		# Get the character of current glyph
 		character = glyph.string
