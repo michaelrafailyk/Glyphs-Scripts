@@ -44,13 +44,13 @@ The steps the script takes:
 
 - Add an empty Color Palette to the Font Info.
 - Remove Color layer attribute and made it the fallback layer.
-- Get the fallback layer id for linking a Color palette layers to him.
-- Iterate all the paths of Color layer and get its colors.
+- Iterate all the paths of Color layer.
+- Get the path color and add it to the Color Palette if it is not there yet.
 - Clear the color info on the fallback layer.
-- Add the colors to the Color Palette if it is not there yet.
 - Get the color index from the Palette.
-- Check if the Color Palette layer with such a color exist or not. It's also depends on the `groupSameColors` param (that is True by default) that you can set at the line 8 of the script.
-- Copy path to a new Color Palette layer (or to an existed one depending on the previous step) and link this layer to the fallback layer.
+- Check if the Color Palette layer with such a color exist or not. It's also depends on the `groupSameColors` param (that is `True` by default) that you can set at the line 8 of the script.
+- Copy path to a new Color Palette layer (or to an existed one depending on the previous step).
+- Link the new Color Palette layer to the fallback layer.
 
 # Generate Kern Strings
 
