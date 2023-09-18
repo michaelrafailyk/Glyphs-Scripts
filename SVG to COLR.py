@@ -1,6 +1,6 @@
 #MenuTitle: SVG to COLR
 __doc__="""
-Convert Color layer to Color Palette layer
+Convert Color layer to Color Palette layers
 """
 
 # params
@@ -34,7 +34,7 @@ for glyph in Glyphs.font.glyphs:
 			# add the color to the Palette if it is not there yet
 			if color not in Glyphs.font.customParameters["Color Palettes"][0]:
 				Glyphs.font.customParameters["Color Palettes"][0].append(color)
-			# get the color index in the Palette
+			# get the color index from the Palette
 			colorIndex = 0
 			for paletteColor in Glyphs.font.customParameters["Color Palettes"][0]:
 				if color == paletteColor:
