@@ -34,6 +34,24 @@ Flip selection (or layer) horizontal, set the new first node (lowest left) and c
 
 Shortcut suggestion: `Ctrl` `Shift` `F`
 
+# SVG to COLR
+
+Convert Color layer to Color Palette layers.
+
+The script process all the glyphs by one pass. It may take up to 30 seconds depending on the design complexity and the count of glyphs. If the font contains more than one master, please make sure the master with Color layer is active, before starting.
+
+The steps the script takes:
+
+- Add an empty Color Palette to the Font Info.
+- Remove Color layer attribute and made it the fallback layer.
+- Get the fallback layer id for linking a Color palette layers to him.
+- Iterate all the paths of Color layer and get its colors.
+- Clear the color info on the fallback layer.
+- Add the colors to the Color Palette if it is not there yet.
+- Get the color index from the Palette.
+- Check if the Color Palette layer with such a color exist or not. It's also depends on the `groupSameColors` param (that is True by default) that you can set at the line 8 of the script.
+- Copy path to a new Color Palette layer (or to an existed one depending on the previous step) and link this layer to the fallback layer.
+
 # Generate Kern Strings
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts. For example, for the left groups `C` `D` `c` `d` `three` `four` `.` `-` `c.sc` `d.sc` and right groups `A` `B` `a` `b` `one` `two` `.` `-` `a.sc` `b.sc` the kern strings will be:
