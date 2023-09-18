@@ -15,7 +15,7 @@ font.disableUpdateInterface()
 if not Glyphs.font.customParameters["Color Palettes"]:
 	Glyphs.font.customParameters["Color Palettes"] = NSMutableArray.arrayWithObjects_([])
 
-# if the font contains more than one master, please make the Color layer master active
+# if the font contains more than one master, please make sure the master with Color layer is active
 activeMasterId = Glyphs.font.selectedFontMaster.id
 
 # process all the glyphs at once
