@@ -3,9 +3,15 @@ __doc__="""
 Convert Color layer to Color Palette layers
 """
 
+
+
 # params
-# group the same colors on one layer
+# place the same colors on one layer if True, or on different layers if False
 groupSameColors = True
+# set the master name (or False for existed Color layer) to set it as the fallback layer
+fallbackLayerName = "Regular"
+
+
 
 font = Glyphs.font
 # disable interface update
@@ -22,15 +28,22 @@ activeMasterId = Glyphs.font.selectedFontMaster.id
 for glyph in Glyphs.font.glyphs:
 	layer = glyph.layers[activeMasterId]
 	if layer.attributes['color']:
-		# remove Color layer attribute and made it the fallback layer
-		layer.attributes['color'] = None
+		if not fallbackLayerName:
+			# remove Color layer attribute and made it the fallback layer
+			layer.attributes['color'] = None
 		# get the fallback layer id for linking a Color palette layers to him
-		masterId = font.fontMasterAtIndex_(font.masterIndex).id
+		fallbackMasterId = font.fontMasterAtIndex_(font.masterIndex).id
+		if fallbackLayerName:
+			for master in font.masters:
+				if master.name == fallbackLayerName:
+					fallbackMasterId = master.id
+					break
 		for path in layer.paths:
 			# get the path color
 			color = path.attributes['fillColor']
-			# clear the color info on the fallback layer
-			path.attributes['fillColor'] = None
+			if not fallbackLayerName:
+				# clear the color info on the fallback layer
+				path.attributes['fillColor'] = None
 			# add the color to the Palette if it is not there yet
 			if color not in Glyphs.font.customParameters["Color Palettes"][0]:
 				Glyphs.font.customParameters["Color Palettes"][0].append(color)
@@ -51,7 +64,7 @@ for glyph in Glyphs.font.glyphs:
 				# copy to a new Color Palette layer
 				newLayer = GSLayer()
 				# link it to the fallback layer
-				newLayer.associatedMasterId = masterId
+				newLayer.associatedMasterId = fallbackMasterId
 				# assign the color index from Palette
 				newLayer.attributes['colorPalette'] = colorIndex
 				# add the layer
