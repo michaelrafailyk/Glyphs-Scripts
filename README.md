@@ -40,6 +40,11 @@ Convert Color layer to Color Palette layers.
 
 The script process all the glyphs by one pass. It may take up to 30 seconds depending on the design complexity and the count of glyphs. If the font contains more than one master, please make sure the master with Color layer is active, before starting.
 
+Params:
+
+- `groupSameColors` = True|False. Place the same colors on one layer if True, or on different layers if False.
+- `fallbackLayerName` = "Master name"|False. Specify the master name (or False to use an existed Color layer) to set it as the fallback layer.
+
 The steps the script takes:
 
 - Add an empty Color Palette to the Font Info.
