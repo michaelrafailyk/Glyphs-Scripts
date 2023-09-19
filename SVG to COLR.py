@@ -82,8 +82,10 @@ for glyph in Glyphs.font.glyphs:
 			else:
 				# copy to an existed Color Palette layer
 				existedLayer.paths.append(path.copy())
-		if fallbackLayerName:
-			Font.masterIndex = fallbackMasterIndex
+
+# focus to fallback layer if set in params
+if fallbackLayerName:
+	Font.masterIndex = fallbackMasterIndex
 
 # enable interface update back
 font.enableUpdateInterface()
