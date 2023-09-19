@@ -38,21 +38,22 @@ Shortcut suggestion: `Ctrl` `Shift` `F`
 
 Convert Color layer to Color Palette layers.
 
-The script process all the glyphs by one pass. It may take up to 30 seconds depending on the design complexity and the count of glyphs. If the font contains more than one master, please make sure the master with Color layer is active, before starting.
+If the font contains more than one master, please make sure the master with Color layer and the fallback master are active or specified in params, before starting. The script process all the glyphs by one pass. It may take up to 30 seconds depending on the design complexity and the count of glyphs.
 
 Params:
 
+- `colorLayerName` = "Master name"|None. Set the name like "Regular" to specify the Color layer, or None to use the selected master.
+- `fallbackLayerName` = "Master name"|None. Set the master name like "Regular" to set it as the fallback layer, or None to use existed Color layer
 - `groupSameColors` = True|False. Place the same colors on one layer if True, or on different layers if False.
-- `fallbackLayerName` = "Master name"|False. Specify the master name (or False to use an existed Color layer) to set it as the fallback layer.
 
 The steps the script takes:
 
 - Add an empty Color Palette to the Font Info.
-- Get every path color and add it to the Color Palette if it is not there yet.
-- Get the color index from the Palette.
-- Check if the Color Palette layer with such a color exist or not. It's also depends on the `groupSameColors` param (that is `True` by default) that you can set at the line 8 of the script.
+- Get every path color from Color layer and add it to the Color Palette if it is not there yet.
+- Check if the layer with such a color exist or not. It's also depends on the `groupSameColors` param (that is `True` by default) that you can set at the line 8 of the script.
 - Copy path to a new Color Palette layer (or to an existed one depending on the previous step).
 - Link the new Color Palette layer to the fallback layer.
+- Focus on fallback layer if set in params.
 
 # Generate Kern Strings
 
