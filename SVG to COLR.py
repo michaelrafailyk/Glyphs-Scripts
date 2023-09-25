@@ -8,8 +8,8 @@ Convert Color layer to Color Palette layers
 # params
 # set the name like "Regular" to specify the Color layer to process, or None to use the selected master
 colorLayerName = None
-# set the master name like "Regular" to use it outlines for the black fallback, or None to use existed Color layer outlines
-fallbackLayerName = "Mono"
+# set the master name like "Regular" to use it as the fallback, or None to use existed Color layer
+fallbackLayerName = None
 # place the same colors on one layer if True, or on different layers if False
 groupSameColors = True
 
