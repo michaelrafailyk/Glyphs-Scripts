@@ -42,7 +42,7 @@ If the font contains more than one master, please make sure the master with Colo
 
 Params:
 
-- `colorLayerName` = "Master name"|None. Set the name like "Regular" to specify the Color layer, or None to use the selected master.
+- `colorLayerName` = "Master name"|None. Set the name like "Regular" to specify the Color layer to process, or None to use the selected master.
 - `fallbackLayerName` = "Master name"|None. Set the master name like "Regular" to set it as the fallback layer, or None to use existed Color layer
 - `groupSameColors` = True|False. Place the same colors on one layer if True, or on different layers if False.
 
@@ -53,6 +53,7 @@ The steps the script takes:
 - Check if the layer with such a color exist or not. It's also depends on the `groupSameColors` param (that is `True` by default) that you can set at the line 8 of the script.
 - Copy path to a new Color Palette layer (or to an existed one depending on the previous step).
 - Link the new Color Palette layer to the fallback layer.
+- Add Color Palette layers with component parts to a composite glyphs.
 - Focus on fallback layer if set in params.
 
 # Generate Kern Strings
