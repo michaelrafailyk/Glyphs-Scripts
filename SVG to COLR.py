@@ -6,20 +6,19 @@ Convert Color layer to Color Palette layers
 
 
 # params
-# set the name like "Regular" to specify the Color layer, or None to use the selected master
+# set the name like "Regular" to specify the Color layer to process, or None to use the selected master
 colorLayerName = None
-# set the master name like "Regular" to set it as the fallback layer, or None to use existed Color layer
-fallbackLayerName = None
+# set the master name like "Regular" to use it outlines for the black fallback, or None to use existed Color layer outlines
+fallbackLayerName = "Mono"
 # place the same colors on one layer if True, or on different layers if False
 groupSameColors = True
 
 
 font = Glyphs.font
-# disable interface update
 font.disableUpdateInterface()
 
 # if the font contains more than one master, please make sure the master with Color layer is active or specified on params
-activeMasterId = Glyphs.font.selectedFontMaster.id
+activeMasterId = font.selectedFontMaster.id
 if colorLayerName:
 	for master in font.masters:
 		if master.name == colorLayerName:
@@ -83,9 +82,27 @@ for glyph in Glyphs.font.glyphs:
 				# copy to an existed Color Palette layer
 				existedLayer.paths.append(path.copy())
 
+# add a color components parts to the glyphs with a components
+for glyph in font.glyphs:
+	layer = glyph.layers[activeMasterId]
+	if layer.components:
+		for component in layer.components:
+			source = component.component.layers[layer.associatedMasterId].parent
+			for colorPaletteLayer in source.layers:
+				if colorPaletteLayer.attributes['colorPalette'] or colorPaletteLayer.attributes['colorPalette'] == 0:
+					newLayer = GSLayer()
+					newLayer.associatedMasterId = activeMasterId
+					newLayer.attributes['colorPalette'] = colorPaletteLayer.attributes['colorPalette']
+					colorComponent = GSComponent(source)
+					colorComponent.automaticAlignment = False
+					colorComponent.x = component.x
+					colorComponent.y = component.y
+					newLayer.components.append(colorComponent)
+					layer.parent.layers.append(newLayer)
+					newLayer.syncMetrics()
+
 # focus to fallback layer if set in params
 if fallbackLayerName:
 	Font.masterIndex = fallbackMasterIndex
 
-# enable interface update back
 font.enableUpdateInterface()
