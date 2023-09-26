@@ -53,7 +53,7 @@ The steps the script takes:
 - Check if the layer with such a color exist or not. It's also depends on the `groupSameColors` param (that is `True` by default) that you can set at the line 8 of the script.
 - Copy path to a new Color Palette layer (or to an existed one depending on the previous step).
 - Link the new Color Palette layer to the fallback layer.
-- Add Color Palette layers with component parts to a composite glyphs.
+- Add Color Palette layers with component parts to all composite glyphs.
 - Focus on fallback layer if set in params.
 
 # Add Color Palette layers to Components
