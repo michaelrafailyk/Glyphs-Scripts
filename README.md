@@ -56,6 +56,10 @@ The steps the script takes:
 - Add Color Palette layers with component parts to a composite glyphs.
 - Focus on fallback layer if set in params.
 
+# Add Color Palette layers to Components
+
+It could be handy when you working on the COLR/CPAL font. So when you finished the base and mark glyphs and created composite glyphs like `/Aacute`, the components appears only on the fallback master layer. To export the color font properly, you also need to add an appropriate Color Palette layers with appropriate component color parts to this composite glyphs. This script automate it by adding a color components parts to all the glyphs builded with a components.
+
 # Generate Kern Strings
 
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts. For example, for the left groups `C` `D` `c` `d` `three` `four` `.` `-` `c.sc` `d.sc` and right groups `A` `B` `a` `b` `one` `two` `.` `-` `a.sc` `b.sc` the kern strings will be:
