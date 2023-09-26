@@ -6,7 +6,7 @@ Convert Color layer to Color Palette layers
 
 
 # params
-# set the name like "Regular" to specify the Color layer to process, or None to use the selected master
+# set the master name like "Regular" to specify the Color layer to process, or None to use the selected master
 colorLayerName = None
 # set the master name like "Regular" to use it as the fallback, or None to use existed Color layer
 fallbackLayerName = None
@@ -88,11 +88,11 @@ for glyph in font.glyphs:
 	if layer.components:
 		for component in layer.components:
 			source = component.component.layers[layer.associatedMasterId].parent
-			for colorPaletteLayer in source.layers:
-				if colorPaletteLayer.attributes['colorPalette'] or colorPaletteLayer.attributes['colorPalette'] == 0:
+			for sourceLayer in source.layers:
+				if sourceLayer.attributes['colorPalette'] or sourceLayer.attributes['colorPalette'] == 0:
 					newLayer = GSLayer()
 					newLayer.associatedMasterId = activeMasterId
-					newLayer.attributes['colorPalette'] = colorPaletteLayer.attributes['colorPalette']
+					newLayer.attributes['colorPalette'] = sourceLayer.attributes['colorPalette']
 					colorComponent = GSComponent(source)
 					colorComponent.automaticAlignment = False
 					colorComponent.x = component.x
