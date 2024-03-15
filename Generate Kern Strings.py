@@ -182,7 +182,7 @@ def openKernStrings():
 			tab = Glyphs.font.newTab()
 		# Show Group Members
 		from GlyphsApp import GSCallbackHandler
-		GSCallbackHandler.activateReporter_(GSCallbackHandler.reporterInstances()["com.glyphsapp.ShowClassMembers"])
+		GSCallbackHandler.activateReporter_(GSCallbackHandler.reporterInstances()["ShowClassMembers"])
 		# Set kerning-only mode
 		tab.graphicView().setDoSpacing_(0)
 		tab.graphicView().setDoKerning_(1)
