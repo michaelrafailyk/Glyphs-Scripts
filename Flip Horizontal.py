@@ -13,7 +13,7 @@ transform.translateXBy_yBy_(NSMidX(bounds), NSMidY(bounds))
 transform.scaleXBy_yBy_(-1, 1)
 transform.translateXBy_yBy_(-NSMidX(bounds), -NSMidY(bounds))
 layer.transformSelection_(transform)
-# set first node and correct path direction
+# set new first node
 if len(selection) > 0:
 	for path in layer.paths:
 		if path.nodes[0] in selection:
@@ -34,8 +34,5 @@ if len(selection) > 0:
 						candidate['y'] = int(node.y)
 			# set the new first node
 			path.makeNodeFirst_(candidate['node'])
-			# correct path direction
-			if path.direction != -1:
-				path.reverse()
-else:
-	layer.correctPathDirection()
+# correct path direction
+layer.correctPathDirection()
