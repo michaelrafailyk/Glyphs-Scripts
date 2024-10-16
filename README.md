@@ -10,7 +10,7 @@ Python scripts for the [Glyphs font editor](http://glyphsapp.com/).
 **Installing**
 
 - Put the scripts into `~/Library/Application Support/Glyphs 3/Scripts` folder.
-- Hold down the `Option` key and choose Script > Reload Scripts, or just press `Cmd` `Opt` `Shift` `Y` keys.
+- Hold down the `Option` key and choose Script > Reload Scripts, or just press `Shift` `Opt` `Cmd` `Y` keys.
 
 **Scripts**
 
@@ -26,13 +26,19 @@ The key feature of this script is how it analyzes bounds if an italic angle is s
 
 If a group of objects of different types (nodes, components, anchors, guides) is selected, they will be aligned to the center of the layer as a group, keeping the distance between the group elements.
 
-Shortcut suggestion: `Ctrl` `Shift` `A`
+Shortcut suggestion: `Shift` `Ctrl` `A`
 
 # Flip Horizontal
 
 Flip selection (or layer) horizontal, set the new first node (lowest left) and correct path direction.
 
-Shortcut suggestion: `Ctrl` `Shift` `F`
+Shortcut suggestion: `Shift` `Ctrl` `F`
+
+# Rotate on 180 Degrees
+
+Rotate selection (or layer) on 180 degrees, set the new first node (lowest left) and correct path direction.
+
+Shortcut suggestion: `Shift` `Ctrl` `R`
 
 # SVG to COLR
 
