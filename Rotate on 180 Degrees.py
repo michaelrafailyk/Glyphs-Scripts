@@ -1,7 +1,7 @@
-#MenuTitle: Rotate on 180 Degree
+#MenuTitle: Rotate on 180 Degrees
 from Foundation import NSAffineTransform, NSMidX, NSMidY
 __doc__="""
-Rotate selection on 180 degree, set the new first node and correct path direction.
+Rotate selection on 180 degrees, set the new first node and correct path direction.
 """
 
 layer = Glyphs.font.selectedLayers[0]
