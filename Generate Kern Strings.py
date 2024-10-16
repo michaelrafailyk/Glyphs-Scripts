@@ -4,7 +4,7 @@ from __future__ import print_function
 __doc__="""
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 """
-# Copyright: Michael Rafailyk, 2023, Version 1.1
+# Copyright: Michael Rafailyk, 2023-2024, Version 1.2
 
 group = {
 	'left': {
@@ -13,6 +13,7 @@ group = {
 		'lowercase': [],
 		'figure': [],
 		'punctuation': [],
+		'georgian': [],
 		'sc': [],
 		'other': []
 	},
@@ -21,6 +22,7 @@ group = {
 		'uppercase': [],
 		'lowercase': [],
 		'figure': [],
+		'georgian': [],
 		'punctuation': [],
 		'sc': [],
 		'other': []
@@ -29,16 +31,18 @@ group = {
 
 strings = {
 	'left': '',
-	'right': '',
+	'leftGeorgian': '',
 	'category': 0,
 	'name': '',
 	'text': ''
 }
 
+font = Glyphs.font
+
 # Get the left and right unique groups and its characters
 def getUniqueGroups():
-	if Glyphs.font:
-		for glyph in Glyphs.font.glyphs:
+	if font:
+		for glyph in font.glyphs:
 			if glyph.leftKerningGroup and glyph.leftKerningGroup not in group['left']['name']:
 				getGlyphData(glyph, 'left')
 			if glyph.rightKerningGroup and glyph.rightKerningGroup not in group['right']['name']:
@@ -47,11 +51,13 @@ def getUniqueGroups():
 		group['left']['uppercase'].sort()
 		group['left']['lowercase'].sort()
 		group['left']['figure'].sort()
+		group['left']['georgian'].sort()
 		group['left']['sc'].sort()
 		group['left']['sc'].sort(key=len)
 		group['right']['uppercase'].sort()
 		group['right']['lowercase'].sort()
 		group['right']['figure'].sort()
+		group['right']['georgian'].sort()
 		group['right']['sc'].sort()
 		group['right']['sc'].sort(key=len)
 	else:
@@ -70,10 +76,10 @@ def getGlyphData(glyph, side):
 	# Write the group name
 	group[side]['name'].append(groupName)
 	character = ''
-	if Glyphs.font.glyphs[groupName]:
+	if font.glyphs[groupName]:
 		# Try to find a glyph with the same name as the name of this group
-		glyph = Glyphs.font.glyphs[groupName]
-		if Glyphs.font.glyphs[groupName].string:
+		glyph = font.glyphs[groupName]
+		if font.glyphs[groupName].string:
 			character = glyph.string
 		else:
 			character = '/' + groupName + ' '
@@ -89,6 +95,8 @@ def getGlyphData(glyph, side):
 	# Write the character to appropriate category
 	if '.sc' in groupName:
 		group[side]['sc'].append('/' + glyph.name)
+	elif glyph.category == 'Letter' and glyph.script == 'georgian':
+		group[side]['georgian'].append(character)
 	elif glyph.category == 'Letter' and glyph.case == 1:
 		group[side]['uppercase'].append(character)
 	elif glyph.category == 'Letter' and glyph.case == 2:
@@ -102,20 +110,28 @@ def getGlyphData(glyph, side):
 
 # Print groups to the Macro Panel output
 def printGroups():
-	if Glyphs.font:
+	if font:
 		global group
 		if group['left']['name'] and group['right']['name']:
 			leftGroup = ''.join(group['left']['uppercase'] + group['left']['lowercase'] + group['left']['figure'] + group['left']['punctuation'] + group['left']['other'] + group['left']['sc'])
 			rightGroup = ''.join(group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc'])
-			print('Right Groups:')
+			leftGroupGeorgian = ''.join(group['left']['georgian'])
+			rightGroupGeorgian = ''.join(group['right']['georgian'])
+			print('Right Groups – Latin/Greek/Cyrillic/Figures/Punctuation:')
 			print(rightGroup)
 			print()
-			print('Left Groups:')
+			print('Left Groups – Latin/Greek/Cyrillic/Figures/Punctuation:')
 			print(leftGroup)
+			print()
+			print('Right Groups – Georgian:')
+			print(rightGroupGeorgian)
+			print()
+			print('Left Groups – Georgian:')
+			print(leftGroupGeorgian)
 
 # Generate kern strings
 def generateKernStrings():
-	if Glyphs.font:
+	if font:
 		global group
 		global strings
 		if group['left']['name'] and group['right']['name']:
@@ -126,8 +142,6 @@ def generateKernStrings():
 				# All characters from Left Groups to kern with
 				strings['left'] += elem
 			for elem in rightGroup:
-				# All characters from Right Groups kern from
-				strings['right'] += elem
 				# Two characters at the begin to compare with
 				compare = 'HH'
 				sc = ''
@@ -144,10 +158,18 @@ def generateKernStrings():
 				# String for kerning
 				# elem is the main character needed kerning with all the following ones
 				strings['text'] += stringsLine
+			# Add Georgian characters to separated kern strings
+			if group['left']['georgian'] and group['right']['georgian']:
+				for elem in group['left']['georgian']:
+					strings['leftGeorgian'] += elem
+				for elem in group['right']['georgian']:
+					compare = 'იი';
+					stringsLine = compare + elem + strings['leftGeorgian'] + '\n'
+					strings['text'] += stringsLine
 			# Remove empty string at the end
-			strings['text'] = strings['text'][:-2]
+			strings['text'] = strings['text'][:-1]
 			# Set category name the same as font family name
-			strings['name'] = Glyphs.font.familyName
+			strings['name'] = font.familyName
 		else:
 			Glyphs.clearLog()
 			Glyphs.showMacroWindow()
@@ -177,9 +199,9 @@ def openKernStrings():
 	global strings
 	if strings['name'] and strings['text']:
 		# Open the Edit view tab
-		tab = Glyphs.font.currentTab
+		tab = font.currentTab
 		if not tab:
-			tab = Glyphs.font.newTab()
+			tab = font.newTab()
 		# Show Group Members
 		from GlyphsApp import GSCallbackHandler
 		GSCallbackHandler.activateReporter_(GSCallbackHandler.reporterInstances()["ShowClassMembers"])
@@ -188,7 +210,7 @@ def openKernStrings():
 		tab.graphicView().setDoKerning_(1)
 		tab.updateKerningButton()
 		# Select Text tool
-		Glyphs.font.tool = 'GlyphsToolText'
+		font.tool = 'GlyphsToolText'
 		# Open Select Sample Text panel
 		samples = NSClassFromString("GSSampleTextController").sharedManager()
 		samples.showSampleTextDialog()
