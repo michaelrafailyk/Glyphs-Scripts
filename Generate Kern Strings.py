@@ -4,7 +4,7 @@ from __future__ import print_function
 __doc__="""
 Generate kern strings based on the Left and Right groups and add them into the Sample Texts.
 """
-# Copyright: Michael Rafailyk, 2023-2024, Version 1.2
+# Copyright: Michael Rafailyk, 2023-2025, Version 1.3
 
 group = {
 	'left': {
@@ -14,6 +14,7 @@ group = {
 		'figure': [],
 		'punctuation': [],
 		'georgian': [],
+		'armenian': [],
 		'sc': [],
 		'other': []
 	},
@@ -23,6 +24,7 @@ group = {
 		'lowercase': [],
 		'figure': [],
 		'georgian': [],
+		'armenian': [],
 		'punctuation': [],
 		'sc': [],
 		'other': []
@@ -32,6 +34,7 @@ group = {
 strings = {
 	'left': '',
 	'leftGeorgian': '',
+	'leftArmenian': '',
 	'category': 0,
 	'name': '',
 	'text': ''
@@ -51,13 +54,15 @@ def getUniqueGroups():
 		group['left']['uppercase'].sort()
 		group['left']['lowercase'].sort()
 		group['left']['figure'].sort()
-		group['left']['georgian'].sort()
+		# group['left']['georgian'].sort()
+		# group['left']['armenian'].sort()
 		group['left']['sc'].sort()
 		group['left']['sc'].sort(key=len)
 		group['right']['uppercase'].sort()
 		group['right']['lowercase'].sort()
 		group['right']['figure'].sort()
-		group['right']['georgian'].sort()
+		# group['right']['georgian'].sort()
+		# group['right']['armenian'].sort()
 		group['right']['sc'].sort()
 		group['right']['sc'].sort(key=len)
 	else:
@@ -97,6 +102,8 @@ def getGlyphData(glyph, side):
 		group[side]['sc'].append('/' + glyph.name)
 	elif glyph.category == 'Letter' and glyph.script == 'georgian':
 		group[side]['georgian'].append(character)
+	elif glyph.category == 'Letter' and glyph.script == 'armenian':
+		group[side]['armenian'].append(character)
 	elif glyph.category == 'Letter' and glyph.case == 1:
 		group[side]['uppercase'].append(character)
 	elif glyph.category == 'Letter' and glyph.case == 2:
@@ -117,6 +124,8 @@ def printGroups():
 			rightGroup = ''.join(group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc'])
 			leftGroupGeorgian = ''.join(group['left']['georgian'])
 			rightGroupGeorgian = ''.join(group['right']['georgian'])
+			leftGroupArmenian = ''.join(group['left']['armenian'])
+			rightGroupArmenian = ''.join(group['right']['armenian'])
 			print('Right Groups – Latin/Greek/Cyrillic/Figures/Punctuation:')
 			print(rightGroup)
 			print()
@@ -128,6 +137,12 @@ def printGroups():
 			print()
 			print('Left Groups – Georgian:')
 			print(leftGroupGeorgian)
+			print()
+			print('Right Groups – Armenian:')
+			print(rightGroupArmenian)
+			print()
+			print('Left Groups – Armenian:')
+			print(leftGroupArmenian)
 
 # Generate kern strings
 def generateKernStrings():
@@ -165,6 +180,14 @@ def generateKernStrings():
 				for elem in group['right']['georgian']:
 					compare = 'იი';
 					stringsLine = compare + elem + strings['leftGeorgian'] + '\n'
+					strings['text'] += stringsLine
+			# Add Georgian characters to separated kern strings
+			if group['left']['armenian'] and group['right']['armenian']:
+				for elem in group['left']['armenian']:
+					strings['leftArmenian'] += elem
+				for elem in group['right']['armenian']:
+					compare = 'ոո';
+					stringsLine = compare + elem + strings['leftArmenian'] + '\n'
 					strings['text'] += stringsLine
 			# Remove empty string at the end
 			strings['text'] = strings['text'][:-1]
