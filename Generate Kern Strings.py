@@ -181,7 +181,7 @@ def generateKernStrings():
 					compare = 'იი';
 					stringsLine = compare + elem + strings['leftGeorgian'] + '\n'
 					strings['text'] += stringsLine
-			# Add Georgian characters to separated kern strings
+			# Add Armenian characters to separated kern strings
 			if group['left']['armenian'] and group['right']['armenian']:
 				for elem in group['left']['armenian']:
 					strings['leftArmenian'] += elem
