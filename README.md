@@ -85,7 +85,7 @@ The steps the script takes:
 
 - Get unique left and right groups.
 - Get one character attached to each group. Priority is given to characters whose name matches the name of the group. If the glyph don't have a character value (not a part of Unicode), the glyph name will be taken, like `/one.osf `.
-- Sort the characters by `uppercase` `lowercase` `figure` `punctuation` `other` `sc` `georgian` `armenian` categories.
+- Sort the characters by `uppercase` `lowercase` `figure` `punctuation` `georgian` `armenian` `sc` `other` categories.
 - Sort the characters inside these categories alphabetically (except of Georgian and Armenian).
 - Print all the right and left groups to the Macro Panel output.
 - Generate kern strings like `CC` `R` `LLLLLLLLL`, where `C` is a character to compare with (can be **HH** **nn** **00** **/h.sc/h.sc**), `R` is the one character from Right Groups (needed kerning to all the following ones), and `L` are all the characters from Left Groups (to kern with). For example, for the character `r` from Right Group, the first kern string may looks like: `nn` `r` `AHOJSTUVXYZaonftsuvxz01234589.?*-'//`.
