@@ -13,9 +13,14 @@ group = {
 		'lowercase': [],
 		'figure': [],
 		'punctuation': [],
-		'georgian': [],
-		'armenian': [],
 		'sc': [],
+		'georgian': [],
+		'armenian': {
+			'uppercase': [],
+			'lowercase': [],
+			'punctuation': [],
+			'sc': []
+		},
 		'other': []
 	},
 	'right': {
@@ -23,10 +28,15 @@ group = {
 		'uppercase': [],
 		'lowercase': [],
 		'figure': [],
-		'georgian': [],
-		'armenian': [],
 		'punctuation': [],
 		'sc': [],
+		'georgian': [],
+		'armenian': {
+			'uppercase': [],
+			'lowercase': [],
+			'punctuation': [],
+			'sc': []
+		},
 		'other': []
 	}
 }
@@ -98,12 +108,19 @@ def getGlyphData(glyph, side):
 		# Correct the name for a slash character
 		character = '//';
 	# Write the character to appropriate category
-	if '.sc' in groupName:
-		group[side]['sc'].append('/' + glyph.name)
-	elif glyph.category == 'Letter' and glyph.script == 'georgian':
+	if glyph.script == 'georgian':
 		group[side]['georgian'].append(character)
-	elif glyph.category == 'Letter' and glyph.script == 'armenian':
-		group[side]['armenian'].append(character)
+	elif glyph.script == 'armenian':		
+		if '.sc' in groupName:
+			group[side]['armenian']['sc'].append(character)
+		elif glyph.category == 'Letter' and glyph.case == 1:
+			group[side]['armenian']['uppercase'].append(character)
+		elif glyph.category == 'Letter' and glyph.case == 2:
+			group[side]['armenian']['lowercase'].append(character)
+		elif glyph.category == 'Punctuation':
+			group[side]['armenian']['punctuation'].append(character)
+	elif '.sc' in groupName:
+		group[side]['sc'].append(character)
 	elif glyph.category == 'Letter' and glyph.case == 1:
 		group[side]['uppercase'].append(character)
 	elif glyph.category == 'Letter' and glyph.case == 2:
@@ -124,25 +141,27 @@ def printGroups():
 			rightGroup = ''.join(group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc'])
 			leftGroupGeorgian = ''.join(group['left']['georgian'])
 			rightGroupGeorgian = ''.join(group['right']['georgian'])
-			leftGroupArmenian = ''.join(group['left']['armenian'])
-			rightGroupArmenian = ''.join(group['right']['armenian'])
+			leftGroupArmenian = ''.join(group['left']['armenian']['uppercase'] + group['left']['armenian']['lowercase'] + group['left']['armenian']['punctuation'] + group['left']['armenian']['sc'])
+			rightGroupArmenian = ''.join(group['right']['armenian']['uppercase'] + group['right']['armenian']['lowercase'] + group['right']['armenian']['punctuation'] + group['right']['armenian']['sc'])
 			print('Right Groups – Latin/Greek/Cyrillic/Figures/Punctuation:')
 			print(rightGroup)
 			print()
 			print('Left Groups – Latin/Greek/Cyrillic/Figures/Punctuation:')
 			print(leftGroup)
-			print()
-			print('Right Groups – Georgian:')
-			print(rightGroupGeorgian)
-			print()
-			print('Left Groups – Georgian:')
-			print(leftGroupGeorgian)
-			print()
-			print('Right Groups – Armenian:')
-			print(rightGroupArmenian)
-			print()
-			print('Left Groups – Armenian:')
-			print(leftGroupArmenian)
+			if leftGroupGeorgian or rightGroupGeorgian:
+				print()
+				print('Right Groups – Georgian:')
+				print(rightGroupGeorgian)
+				print()
+				print('Left Groups – Georgian:')
+				print(leftGroupGeorgian)
+			if leftGroupArmenian or rightGroupArmenian:
+				print()
+				print('Right Groups – Armenian:')
+				print(rightGroupArmenian)
+				print()
+				print('Left Groups – Armenian:')
+				print(leftGroupArmenian)
 
 # Generate kern strings
 def generateKernStrings():
@@ -182,12 +201,22 @@ def generateKernStrings():
 					stringsLine = compare + elem + strings['leftGeorgian'] + '\n'
 					strings['text'] += stringsLine
 			# Add Armenian characters to separated kern strings
-			if group['left']['armenian'] and group['right']['armenian']:
-				for elem in group['left']['armenian']:
+			leftGroupArmenian = group['left']['armenian']['uppercase'] + group['left']['armenian']['lowercase'] + group['left']['armenian']['punctuation']
+			rightGroupArmenian = group['right']['armenian']['uppercase'] + group['right']['armenian']['lowercase'] + group['right']['armenian']['punctuation'] + group['right']['armenian']['sc']
+			if leftGroupArmenian and rightGroupArmenian:
+				for elem in leftGroupArmenian:
 					strings['leftArmenian'] += elem
-				for elem in group['right']['armenian']:
-					compare = 'ոո';
-					stringsLine = compare + elem + strings['leftArmenian'] + '\n'
+				for elem in rightGroupArmenian:
+					compare = 'ՈՈ'
+					sc = ''
+					scLeft = ''.join(group['left']['armenian']['sc'])
+					if elem[0].islower():
+						compare = 'ոո'
+					if elem[0].isupper():
+						sc = scLeft
+					stringsLine = compare + elem + strings['leftArmenian'] + sc + '\n'
+					if '.sc' in elem:
+						stringsLine = '/vo-arm.sc/vo-arm.sc' + elem + scLeft + '\n'
 					strings['text'] += stringsLine
 			# Remove empty string at the end
 			strings['text'] = strings['text'][:-1]
