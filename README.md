@@ -30,9 +30,15 @@ Shortcut suggestion: `Shift` `Ctrl` `A`
 
 # Flip Horizontal
 
-Flip selection (or layer) horizontal, set the new first node (lowest left) and correct path direction.
+Flip selection (or layer) horizontally, set the new first node (lowest left) and correct path direction.
 
 Shortcut suggestion: `Shift` `Ctrl` `F`
+
+# Flip Vertical
+
+Flip selection (or layer) vertically, set the new first node (lowest left) and correct path direction.
+
+Shortcut suggestion: `Shift` `Ctrl` `V`
 
 # Rotate on 180 Degrees
 
