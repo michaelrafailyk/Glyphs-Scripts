@@ -90,8 +90,16 @@ def getGlyphData(glyph, side):
 	if font.glyphs[groupName]:
 		# Try to find a glyph with the same name as the name of this group
 		glyph = font.glyphs[groupName]
-		if font.glyphs[groupName].string:
+		if glyph.string:
 			character = glyph.string
+		else:
+			character = '/' + groupName + ' '
+	elif '.sc' in groupName:
+		# Try to find a Small Caps glyph with the same name as the name of this group
+		groupNameLower = groupName[0].lower() + groupName[1:]
+		glyph = font.glyphs[groupNameLower]
+		if font.glyphs[groupNameLower]:
+			character = '/' + groupNameLower + ' '
 		else:
 			character = '/' + groupName + ' '
 	elif glyph.string:
