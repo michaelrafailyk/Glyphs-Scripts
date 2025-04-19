@@ -222,6 +222,14 @@ def generateKernStrings():
 					if '.sc' in elem:
 						stringsLine = '/vo-arm.sc/vo-arm.sc' + elem + scLeft + '\n'
 					strings['text'] += stringsLine
+				# Armenian marks negative kerning
+				compare = 'ոո'
+				armenianMarks = '՛՜՞'
+				strings['text'] += compare + 'ա' + armenianMarks + '\n'
+				strings['text'] += compare + 'է' + armenianMarks + '\n'
+				strings['text'] += compare + 'ը' + armenianMarks + '\n'
+				strings['text'] += compare + 'ւ' + armenianMarks + '\n'
+				strings['text'] += compare + 'օ' + armenianMarks + '\n'
 			# Remove empty string at the end
 			strings['text'] = strings['text'][:-1]
 			# Set category name the same as font family name
