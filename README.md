@@ -18,7 +18,7 @@ Python scripts for the [Glyphs font editor](http://glyphsapp.com/).
 
 Align selection to horizontal center of the layer, also considering the italic angle.
 
-![](Images/AlignToLayerHorizontalCenter.gif)
+![](AlignToLayerHorizontalCenter.gif)
 
 The script does not change the sidebearings to align the content, but only changes the x-coordinates of the selected elements.
 
