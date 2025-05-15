@@ -103,6 +103,8 @@ The steps the script takes:
 - Open Select Sample Texts panel and select the first string from added category.
 - Set the caret position between the first kern pair (right after the main character).
 
+![](GenerateKernStrings.gif)
+
 # License
 
 Copyright 2023 Michael Rafailyk (@michaelrafailyk).
