@@ -14,6 +14,8 @@ group = {
 		'figure': [],
 		'punctuation': [],
 		'sc': [],
+		'greek': [],
+		'cyrillic': [],
 		'georgian': [],
 		'armenian': {
 			'uppercase': [],
@@ -30,6 +32,8 @@ group = {
 		'figure': [],
 		'punctuation': [],
 		'sc': [],
+		'greek': [],
+		'cyrillic': [],
 		'georgian': [],
 		'armenian': {
 			'uppercase': [],
@@ -52,49 +56,6 @@ strings = {
 
 font = Glyphs.font
 
-# Sort list inside the subgroups
-def kernGroupSortKey(item):
-	# item examples: 'A', '/B.001 ', '/A.alt '
-	name = item.strip()
-	# remove slash if present
-	if name.startswith('/'):
-		name = name[1:]
-	# remove trailing space
-	name = name.strip()
-	# split suffix
-	if '.' in name:
-		base, suffix = name.split('.', 1)
-		# try numeric suffix
-		try:
-			number = int(suffix)
-		except:
-			number = 0
-		return (base, 1, number)
-	else:
-		return (name, 0, 0)
-
-# Get the left and right unique groups and its characters
-def getUniqueGroups():
-	if font:
-		for glyph in font.glyphs:
-			if glyph.leftKerningGroup and glyph.leftKerningGroup not in group['left']['name']:
-				getGlyphData(glyph, 'left')
-			if glyph.rightKerningGroup and glyph.rightKerningGroup not in group['right']['name']:
-				getGlyphData(glyph, 'right')
-		# Sort elements inside the groups categories
-		group['left']['uppercase'].sort(key=kernGroupSortKey)
-		group['left']['lowercase'].sort(key=kernGroupSortKey)
-		group['left']['figure'].sort(key=kernGroupSortKey)
-		group['left']['sc'].sort(key=kernGroupSortKey)
-		group['right']['uppercase'].sort(key=kernGroupSortKey)
-		group['right']['lowercase'].sort(key=kernGroupSortKey)
-		group['right']['figure'].sort(key=kernGroupSortKey)
-		group['right']['sc'].sort(key=kernGroupSortKey)
-	else:
-		Glyphs.clearLog()
-		Glyphs.showMacroWindow()
-		print('Please open the font first')
-
 # Sort unique groups and its characters by category and add them to the group array
 def getGlyphData(glyph, side):
 	global group
@@ -110,28 +71,26 @@ def getGlyphData(glyph, side):
 		# Try to find a glyph with the same name as the name of this group
 		glyph = font.glyphs[groupName]
 		if glyph.string:
-			character = glyph.string
+			character = '/' + glyph.name
 		else:
-			character = '/' + groupName + ' '
+			character = '/' + groupName
 	elif '.sc' in groupName:
 		# Try to find a Small Caps glyph with the same name as the name of this group
 		groupNameLower = groupName[0].lower() + groupName[1:]
 		glyph = font.glyphs[groupNameLower]
 		if font.glyphs[groupNameLower]:
-			character = '/' + groupNameLower + ' '
+			character = '/' + groupNameLower
 		else:
-			character = '/' + groupName + ' '
-	elif glyph.string:
-		# Get the character of current glyph
-		character = glyph.string
+			character = '/' + groupName
 	else:
 		# Get the glyph name (for glyphs with suffixes)
-		character = '/' + glyph.name + ' '
-	if character == '/':
-		# Correct the name for a slash character
-		character = '//';
+		character = '/' + glyph.name
 	# Write the character to appropriate category
-	if glyph.script == 'georgian':
+	if glyph.script == 'greek':
+		group[side]['greek'].append(character)
+	elif glyph.script == 'cyrillic':
+		group[side]['cyrillic'].append(character)
+	elif glyph.script == 'georgian':
 		group[side]['georgian'].append(character)
 	elif glyph.script == 'armenian':		
 		if '.sc' in groupName:
@@ -155,13 +114,37 @@ def getGlyphData(glyph, side):
 	else:
 		group[side]['other'].append(character)
 
+# Get the left and right unique groups and its characters
+def getUniqueGroups():
+	if font:
+		for glyph in font.glyphs:
+			if glyph.leftKerningGroup and glyph.leftKerningGroup not in group['left']['name']:
+				getGlyphData(glyph, 'left')
+			if glyph.rightKerningGroup and glyph.rightKerningGroup not in group['right']['name']:
+				getGlyphData(glyph, 'right')
+		# Sort elements inside the groups categories
+		group['left']['uppercase'].sort()
+		group['left']['lowercase'].sort()
+		group['left']['greek'].sort()
+		group['left']['cyrillic'].sort()
+		group['left']['sc'].sort()
+		group['right']['uppercase'].sort()
+		group['right']['lowercase'].sort()
+		group['right']['greek'].sort()
+		group['right']['cyrillic'].sort()
+		group['right']['sc'].sort()
+	else:
+		Glyphs.clearLog()
+		Glyphs.showMacroWindow()
+		print('Please open the font first')
+
 # Print groups to the Macro Panel output
 def printGroups():
 	if font:
 		global group
 		if group['left']['name'] and group['right']['name']:
-			leftGroup = ''.join(group['left']['uppercase'] + group['left']['lowercase'] + group['left']['figure'] + group['left']['punctuation'] + group['left']['other'] + group['left']['sc'])
-			rightGroup = ''.join(group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc'])
+			leftGroup = ''.join(group['left']['uppercase'] + group['left']['lowercase'] + group['left']['greek'] + group['left']['cyrillic'] + group['left']['figure'] + group['left']['punctuation'] + group['left']['other'] + group['left']['sc'])
+			rightGroup = ''.join(group['right']['uppercase'] + group['right']['lowercase'] + group['right']['greek'] + group['right']['cyrillic'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc'])
 			leftGroupGeorgian = ''.join(group['left']['georgian'])
 			rightGroupGeorgian = ''.join(group['right']['georgian'])
 			leftGroupArmenian = ''.join(group['left']['armenian']['uppercase'] + group['left']['armenian']['lowercase'] + group['left']['armenian']['punctuation'] + group['left']['armenian']['sc'])
@@ -193,8 +176,8 @@ def generateKernStrings():
 		global strings
 		if group['left']['name'] and group['right']['name']:
 			# Merge categories
-			leftGroup = group['left']['uppercase'] + group['left']['lowercase'] + group['left']['figure'] + group['left']['punctuation'] + group['left']['other']
-			rightGroup = group['right']['uppercase'] + group['right']['lowercase'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc']
+			leftGroup = group['left']['uppercase'] + group['left']['lowercase'] + group['left']['greek'] + group['left']['cyrillic'] + group['left']['figure'] + group['left']['punctuation'] + group['left']['other']
+			rightGroup = group['right']['uppercase'] + group['right']['lowercase'] + group['right']['greek'] + group['right']['cyrillic'] + group['right']['figure'] + group['right']['punctuation'] + group['right']['other'] + group['right']['sc']
 			for elem in leftGroup:
 				# All characters from Left Groups to kern with
 				strings['left'] += elem
