@@ -52,6 +52,27 @@ strings = {
 
 font = Glyphs.font
 
+# Sort list inside the subgroups
+def kernGroupSortKey(item):
+	# item examples: 'A', '/B.001 ', '/A.alt '
+	name = item.strip()
+	# remove slash if present
+	if name.startswith('/'):
+		name = name[1:]
+	# remove trailing space
+	name = name.strip()
+	# split suffix
+	if '.' in name:
+		base, suffix = name.split('.', 1)
+		# try numeric suffix
+		try:
+			number = int(suffix)
+		except:
+			number = 0
+		return (base, 1, number)
+	else:
+		return (name, 0, 0)
+
 # Get the left and right unique groups and its characters
 def getUniqueGroups():
 	if font:
@@ -61,16 +82,14 @@ def getUniqueGroups():
 			if glyph.rightKerningGroup and glyph.rightKerningGroup not in group['right']['name']:
 				getGlyphData(glyph, 'right')
 		# Sort elements inside the groups categories
-		group['left']['uppercase'].sort()
-		group['left']['lowercase'].sort()
-		group['left']['figure'].sort()
-		group['left']['sc'].sort()
-		group['left']['sc'].sort(key=len)
-		group['right']['uppercase'].sort()
-		group['right']['lowercase'].sort()
-		group['right']['figure'].sort()
-		group['right']['sc'].sort()
-		group['right']['sc'].sort(key=len)
+		group['left']['uppercase'].sort(key=kernGroupSortKey)
+		group['left']['lowercase'].sort(key=kernGroupSortKey)
+		group['left']['figure'].sort(key=kernGroupSortKey)
+		group['left']['sc'].sort(key=kernGroupSortKey)
+		group['right']['uppercase'].sort(key=kernGroupSortKey)
+		group['right']['lowercase'].sort(key=kernGroupSortKey)
+		group['right']['figure'].sort(key=kernGroupSortKey)
+		group['right']['sc'].sort(key=kernGroupSortKey)
 	else:
 		Glyphs.clearLog()
 		Glyphs.showMacroWindow()
@@ -267,8 +286,8 @@ def openKernStrings():
 		if not tab:
 			tab = font.newTab()
 		# Show Group Members
-		from GlyphsApp import GSCallbackHandler
-		GSCallbackHandler.activateReporter_(GSCallbackHandler.reporterInstances()["ShowClassMembers"])
+		# from GlyphsApp import GSCallbackHandler
+		# GSCallbackHandler.activateReporter_(GSCallbackHandler.reporterInstances()["ShowClassMembers"])
 		# Set kerning-only mode
 		tab.graphicView().setDoSpacing_(0)
 		tab.graphicView().setDoKerning_(1)
