@@ -46,6 +46,10 @@ Rotate selection (or layer) on 180 degrees, set the new first node (lowest left)
 
 Shortcut suggestion: `Shift` `Ctrl` `R`
 
+# Add Ghost Hints for Unicase Font
+
+The script for unicase / all caps fonts. It adds unattached ghost hints at baseline and cap height zones for glyphs containing nodes inside both of these zones. If "Get Hints From Master" parameter is presented, that master will be used for getting zones, and only that master will be hinted. Otherwise, selected master will be used for getting zones, and all masters will be hinted.
+
 # SVG to COLR
 
 Convert Color layer to Color Palette layers.
