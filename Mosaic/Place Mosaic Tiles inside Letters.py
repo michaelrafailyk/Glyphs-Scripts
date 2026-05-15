@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __doc__="""
-This script for Glyphs transforms selected glyph outlines into a procedural mosaic composed of rotated square tiles distributed along the internal flow of each stroke, creating two parallel rows of tiles. It begins by analyzing the actual outline geometry to estimate dominant horizontal and vertical stem thicknesses, then derives tile size, grout spacing, and row offset from those measurements. Each glyph contour is flattened into linear segments, after which a parallel inner guide path is constructed by offsetting every segment inward and intersecting neighboring offsets to preserve contour continuity. Because horizontal and vertical stems may have different thicknesses, the script applies directional offset compensation: rows placed along thinner strokes are shifted less inward so the tiles remain visually centered inside anisotropic strokes instead of drifting toward one side. Along the generated guide path, the algorithm distributes tiles using arc-length spacing, detects short perpendicular bridge segments that behave like stroke endings or caps, reserves mandatory tile positions around those regions, and rebuilds local tile sequences between those anchors to maintain visually balanced spacing without cumulative drift. Additional logic attempts to prevent overlaps on tight curves, resolve duplicated closing tiles on closed contours, and preserve continuity at contour closures. Finally, the script applies small randomized shifts and rotations to imitate irregular hand-laid mosaic placement, removes the original outline paths, and inserts the generated tile paths back into the glyph layer as the final artwork.
+This Glyphs script turns selected glyph outlines into a hand-laid mosaic made from small square tiles that follow the natural flow of each stroke. It analyzes the current master’s stem thicknesses to automatically determine tile size, spacing, and row placement, then rebuilds each contour into two balanced rows of tiles positioned inside the original shape. The script intelligently adapts to different stroke widths, keeping tiles visually centered even in uneven horizontal and vertical stems, while preserving smooth continuity around curves, corners, and contour endings. It also includes spacing correction and overlap prevention logic to maintain clean, consistent distribution across complex shapes. To create a more organic appearance, each tile receives subtle random shifts and rotations that mimic the imperfections of real hand-placed mosaic work. Once complete, the original outlines are replaced with the generated mosaic artwork directly inside the glyph layer.
 """
 
 from GlyphsApp import *
@@ -33,7 +33,7 @@ FLATNESS = 0.3
 
 # CALCULATE CONSTANTS
 
-# Fallback stems
+# These fallback stems values will be used in the case if master stems are not set
 H_STEM = 80
 V_STEM = 70
 # Get master stems
