@@ -12,6 +12,7 @@ import math
 import random
 
 FONT = Glyphs.font
+master = FONT.selectedFontMaster
 def getLayers():
 	layers = FONT.selectedLayers
 	if layers and len(layers) > 0:
@@ -30,78 +31,18 @@ FLATNESS = 0.3
 
 # --------------------------------------------------
 
-# STEM ANALYSIS
+# CALCULATE CONSTANTS
 
-# Uppercase stems letter
-UPPERCASE_STEMS_LETTER = "L"
-
-# Measures dominant vertical and horizontal stems directly from glyph outlines
-def measureStemsFromGlyph(font):
-	masterId = font.selectedFontMaster.id
-	glyph = font.glyphs[UPPERCASE_STEMS_LETTER]
-	if glyph is None:
-		return None, None
-	layer = glyph.layers[masterId]
-	verticalSegments = []
-	horizontalSegments = []
-	# Collect long straight segments
-	for path in layer.paths:
-		nodes = path.nodes
-		for i in range(len(nodes)):
-			n1 = nodes[i]
-			n2 = nodes[(i + 1) % len(nodes)]
-			p1 = n1.position
-			p2 = n2.position
-			dx = p2.x - p1.x
-			dy = p2.y - p1.y
-			length = math.hypot(dx, dy)
-			# Ignore tiny segments
-			if length < 20:
-				continue
-			# Near vertical
-			if abs(dx) < 0.01:
-				verticalSegments.append({
-					"length": length,
-					"x": p1.x,
-					"y1": p1.y,
-					"y2": p2.y
-				})
-			# Near horizontal
-			if abs(dy) < 0.01:
-				horizontalSegments.append({
-					"length": length,
-					"y": p1.y,
-					"x1": p1.x,
-					"x2": p2.x
-				})
-	# Sort by length
-	verticalSegments.sort(
-		key=lambda s: s["length"],
-		reverse=True
-	)
-	horizontalSegments.sort(
-		key=lambda s: s["length"],
-		reverse=True
-	)
-	# Measure stem thicknesses
-	vStem = None
-	hStem = None
-	# Vertical stem thickness: distance between two longest vertical edges
-	if len(verticalSegments) >= 2:
-		v1 = verticalSegments[0]
-		v2 = verticalSegments[1]
-		vStem = abs(v1["x"] - v2["x"])
-	# Horizontal stem thickness: distance between two longest horizontal edges
-	if len(horizontalSegments) >= 2:
-		h1 = horizontalSegments[0]
-		h2 = horizontalSegments[1]
-		hStem = abs(h1["y"] - h2["y"])
-	return hStem, vStem
-
-# CONSTANTS
-
-# Stems measured from actual outlines
-H_STEM, V_STEM = measureStemsFromGlyph(FONT)
+# Fallback stems
+H_STEM = 80
+V_STEM = 70
+# Get master stems
+for i, stem in enumerate(FONT.stems):
+	value = master.stems[i]
+	if stem.horizontal:
+		H_STEM = value
+	else:
+		V_STEM = value
 # Determine dominant stroke direction
 MAJOR_STEM = max(H_STEM, V_STEM)
 MINOR_STEM = min(H_STEM, V_STEM)
