@@ -34,8 +34,8 @@ FLATNESS = 0.3
 # CALCULATE CONSTANTS
 
 # These fallback stems values will be used in the case if master stems are not set
-H_STEM = 80
-V_STEM = 70
+H_STEM = 70
+V_STEM = 80
 # Get master stems
 for i, stem in enumerate(FONT.stems):
 	value = master.stems[i]
