@@ -2,8 +2,55 @@
 # -*- coding: utf-8 -*-
 
 __doc__="""
-This Glyphs script turns selected glyph outlines into a hand-laid mosaic made from small square tiles that follow the natural flow of each stroke. It analyzes the current master’s stem thicknesses to automatically determine tile size, spacing, and row placement, then rebuilds each contour into two balanced rows of tiles positioned inside the original shape. The script intelligently adapts to different stroke widths, keeping tiles visually centered even in uneven horizontal and vertical stems, while preserving smooth continuity around curves, corners, and contour endings. It also includes spacing correction and overlap prevention logic to maintain clean, consistent distribution across complex shapes. To create a more organic appearance, each tile receives subtle random shifts and rotations that mimic the imperfections of real hand-placed mosaic work. Once complete, the original outlines are replaced with the generated mosaic artwork directly inside the glyph layer.
+Converts glyph outlines into a hand-laid mosaic made from two parallel rows of square tiles with subtle random shifts and rotations for a realistic handcrafted appearance.
 """
+
+# --------------------------------------------------
+
+# SETUP
+
+# This script relies on master stem values defined in Font Info > Masters > Stems.
+# Ensure stems are correctly assigned with correct arrows icons, as they determine tile size and spacing behavior.
+
+# Horizontal stems (Hstem) represent horizontal stroke thickness and are shown with arrows ↕ in Glyphs UI (stem.horizontal == True).
+# Vertical stems (Vstem) represent vertical stroke thickness and are shown with arrows ↔ in Glyphs UI (stem.horizontal == False).
+
+# --------------------------------------------------
+
+# FEATURES
+
+# Letter Construction Specifics
+# - Works best with any designs where vertical stokes are upright and not slanted.
+# - Will not work well with calligraphic designs where strokes are diagonal and high-contrast.
+
+# Workflow
+# - Replaces original glyph outlines with generated mosaic artwork
+# - Processes selected/opened glyphs or entire master if nothing is selected
+# - Temporarily disables UI updates for performance optimization
+# - Includes configurable parameters for randomness and curve precision
+
+# Tile Generation
+# - Converts glyph outlines into a mosaic made from two parallel rows of square tiles
+# - Adds subtle random positional shifts and rotations to simulate handcrafted mosaic work
+
+# Stroke & Stem Analysis
+# - Automatically derives tile size and grout spacing from current master stem values
+# - Supports both traditional contrast and reverse-contrast designs
+# - Dynamically compensates for varying stem widths to keep tile rows centered
+
+# Geometry & Path Processing
+# - Uses flattened Bézier analysis and arc-length sampling for even distribution
+# - Rebuilds contours into balanced internal tile rows following stroke flow
+# - Preserves continuity around curves, corners, and stroke endings
+# - Detects short stroke endings and applies double-tile cap behavior
+
+# Collision & Normalization System
+# - Applies collision prevention to avoid overlapping tiles
+# - Uses spacing correction logic for tight geometry areas
+# - Uses global normalization to maintain consistent rhythm across contours
+# - Prevents duplicate or stacked tiles on closed paths
+
+# --------------------------------------------------
 
 from GlyphsApp import *
 from Foundation import NSPoint
@@ -85,10 +132,7 @@ def pointAndAngleAtDistance(segments, targetDist):
 			p2 = seg["p2"]
 			x = p1.x + (p2.x - p1.x) * t
 			y = p1.y + (p2.y - p1.y) * t
-			ang = math.atan2(
-				p2.y - p1.y,
-				p2.x - p1.x
-			)
+			ang = math.atan2(p2.y - p1.y, p2.x - p1.x)
 			return NSPoint(x, y), ang
 	return None, 0
 
@@ -195,26 +239,25 @@ def offsetPolyline(points):
 		ty = dy / length
 		nx = -ty
 		ny = tx
-		# Segment angle
-		ang = math.atan2(dy, dx)
+		# --------------------------------------------------
 		# Dynamic stem offset compensation
+		# This part transforms contrast font to non-contrast
+		# The tiles along thinner strokes (MINOR stem) will be differently (closer) shifted from the path
+		# This way two rows of tiles will never collapse to each other and distance between them will be constant
+		segmentAngle = math.atan2(dy, dx)
 		baseOffset = TILE_SIZE / 2
 		stemDifference = (MAJOR_STEM - MINOR_STEM) / 2
-		# 0 on dominant direction
-		# 1 on weaker direction
 		if V_STEM >= H_STEM:
-			t = abs(math.cos(ang))
+			# Classic contrast font — vertical stem is thicker, like in Latin script
+			t = abs(math.cos(segmentAngle))
 		else:
-			t = abs(math.sin(ang))
+			# Reversed contrast font — horizontal stem is thicker like in Arabic script
+			t = abs(math.sin(segmentAngle))
+		# --------------------------------------------------
+		# Final offset for current tile point
 		offset = baseOffset - stemDifference * t
-		op1 = NSPoint(
-			p1.x + nx * offset,
-			p1.y + ny * offset
-		)
-		op2 = NSPoint(
-			p2.x + nx * offset,
-			p2.y + ny * offset
-		)
+		op1 = NSPoint(p1.x + nx * offset, p1.y + ny * offset)
+		op2 = NSPoint(p2.x + nx * offset, p2.y + ny * offset)
 		offsetSegments.append((op1, op2))
 	if len(offsetSegments) == 0:
 		return []
